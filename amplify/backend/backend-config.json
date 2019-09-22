@@ -1,0 +1,9 @@
+{
+    "auth": {
+        "serverlessairelineauth": {
+            "service": "Cognito",
+            "providerPlugin": "awscloudformation",
+            "dependsOn": []
+        }
+    }
+}

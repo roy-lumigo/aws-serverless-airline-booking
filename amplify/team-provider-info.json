@@ -1,0 +1,19 @@
+{
+    "airline": {
+        "awscloudformation": {
+            "AuthRoleName": "awsserverlessairline-airline-20190916152549-authRole",
+            "UnauthRoleArn": "arn:aws:iam::792713827034:role/awsserverlessairline-airline-20190916152549-unauthRole",
+            "AuthRoleArn": "arn:aws:iam::792713827034:role/awsserverlessairline-airline-20190916152549-authRole",
+            "Region": "us-east-1",
+            "DeploymentBucketName": "awsserverlessairline-airline-20190916152549-deployment",
+            "UnauthRoleName": "awsserverlessairline-airline-20190916152549-unauthRole",
+            "StackName": "awsserverlessairline-airline-20190916152549",
+            "StackId": "arn:aws:cloudformation:us-east-1:792713827034:stack/awsserverlessairline-airline-20190916152549/1de1a6f0-d87d-11e9-9db5-129cd46a326a"
+        },
+        "categories": {
+            "auth": {
+                "serverlessairelineauth": {}
+            }
+        }
+    }
+}
