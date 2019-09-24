@@ -9,6 +9,7 @@ from lambda_python_powertools.logging import (
     logger_setup,
 )
 from lambda_python_powertools.tracing import Tracer
+from lumigo_tracer import lumigo_tracer
 
 logger = logger_setup()
 tracer = Tracer()
@@ -29,6 +30,7 @@ class PaymentException(Exception):
 
 
 @tracer.capture_method
+@lumigo_tracer(token='t_4a6ac0f16916b9348079')
 def collect_payment(charge_id):
     """Collects payment from a pre-authorized charge through Payment API
 

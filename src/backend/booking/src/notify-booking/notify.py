@@ -3,6 +3,7 @@ import os
 
 import boto3
 from botocore.exceptions import ClientError
+from lumigo_tracer import lumigo_tracer
 
 from lambda_python_powertools.logging import (
     MetricUnit,
@@ -33,6 +34,7 @@ class BookingNotificationException(Exception):
 
 
 @tracer.capture_method
+@lumigo_tracer(token='t_4a6ac0f16916b9348079')
 def notify_booking(payload, booking_reference):
     """Notify whether a booking have been processed successfully
 

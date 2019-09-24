@@ -4,6 +4,7 @@ import uuid
 
 import boto3
 from botocore.exceptions import ClientError
+from lumigo_tracer import lumigo_tracer
 
 
 from lambda_python_powertools.logging import (
@@ -41,6 +42,7 @@ def is_booking_request_valid(booking):
 
 
 @tracer.capture_method
+@lumigo_tracer(token='t_4a6ac0f16916b9348079')
 def reserve_booking(booking):
     """Creates a new booking as UNCONFIRMED
 

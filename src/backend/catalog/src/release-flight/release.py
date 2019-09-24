@@ -3,6 +3,8 @@ import os
 
 import boto3
 from botocore.exceptions import ClientError
+from lumigo_tracer import lumigo_tracer
+
 
 session = boto3.Session()
 dynamodb = session.resource('dynamodb')
@@ -47,7 +49,7 @@ def reserve_seat_on_flight(flight_id):
     except ClientError as e:
         raise FlightReservationException(e.response['Error']['Message'])
 
-
+@lumigo_tracer(token='t_4a6ac0f16916b9348079')
 def lambda_handler(event, context):
     if 'outboundFlightId' not in event:
         raise ValueError('Invalid arguments')

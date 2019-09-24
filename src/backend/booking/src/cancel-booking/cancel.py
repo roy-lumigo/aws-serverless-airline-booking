@@ -3,6 +3,7 @@ import os
 
 import boto3
 from botocore.exceptions import ClientError
+from lumigo_tracer import lumigo_tracer
 
 from lambda_python_powertools.logging import (
     logger_inject_process_booking_sfn,
@@ -34,6 +35,7 @@ class BookingCancellationException(Exception):
 
 
 @tracer.capture_method
+@lumigo_tracer(token='t_56497e64fb344c4f851e7')
 def cancel_booking(booking_id):
     try:
         logger.debug({"operation": "cancel_booking", "details": {"booking_id": booking_id}})

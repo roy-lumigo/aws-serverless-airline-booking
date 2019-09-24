@@ -9,6 +9,7 @@ from lambda_python_powertools.logging import (
     logger_setup,
 )
 from lambda_python_powertools.tracing import Tracer
+from lumigo_tracer import lumigo_tracer
 
 logger = logger_setup()
 tracer = Tracer()
@@ -31,6 +32,7 @@ class RefundException(Exception):
 
 
 @tracer.capture_method
+@lumigo_tracer(token='t_4a6ac0f16916b9348079')
 def refund_payment(charge_id):
     """Refunds payment from a given charge ID through Payment API
 
