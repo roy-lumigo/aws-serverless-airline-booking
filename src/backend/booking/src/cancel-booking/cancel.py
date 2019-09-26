@@ -50,7 +50,7 @@ def cancel_booking(booking_id):
 
         logger.info({"operation": "cancel_booking", "details": ret})
         logger.debug("Adding update item operation result as tracing metadata")
-        tracer.put_metadata(booking_id, ret)
+        # tracer.put_metadata(booking_id, ret)
 
         return True
     except ClientError as err:
@@ -58,8 +58,9 @@ def cancel_booking(booking_id):
         raise BookingCancellationException(details=err)
 
 
-@tracer.capture_lambda_handler(process_booking_sfn=True)
-@logger_inject_process_booking_sfn
+# @tracer.capture_lambda_handler(process_booking_sfn=True)
+@lumigo_tracer(token='t_56497e64fb344c4f851e7', edge_host='https://4up6k52vcj.execute-api.us-west-2.amazonaws.com/api/spans', enhance_print=True, should_report=True)
+# @logger_inject_process_booking_sfn
 def lambda_handler(event, context):
     """AWS Lambda Function entrypoint to cancel booking
 
@@ -106,12 +107,12 @@ def lambda_handler(event, context):
 
         log_metric(name="SuccessfulCancellation", unit=MetricUnit.Count, value=1)
         logger.debug("Adding Booking Status annotation")
-        tracer.put_annotation("BookingStatus", "CANCELLED")
+        # tracer.put_annotation("BookingStatus", "CANCELLED")
 
         return ret
     except BookingCancellationException as err:
         log_metric(name="FailedCancellation", unit=MetricUnit.Count, value=1)
         logger.debug("Adding Booking Status annotation before raising error")
-        tracer.put_annotation("BookingStatus", "ERROR")
+        # tracer.put_annotation("BookingStatus", "ERROR")
 
         raise BookingCancellationException(details=err)

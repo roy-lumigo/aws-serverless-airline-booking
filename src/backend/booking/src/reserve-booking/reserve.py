@@ -42,7 +42,6 @@ def is_booking_request_valid(booking):
 
 
 # @tracer.capture_method
-@lumigo_tracer(token='t_56497e64fb344c4f851e7', edge_host='https://4up6k52vcj.execute-api.us-west-2.amazonaws.com/api/spans', enhance_print=True, should_report=True)
 def reserve_booking(booking):
     """Creates a new booking as UNCONFIRMED
 
@@ -103,8 +102,9 @@ def reserve_booking(booking):
         raise BookingReservationException(details=err)
 
 
-@tracer.capture_lambda_handler(process_booking_sfn=True)
-@logger_inject_process_booking_sfn
+# @tracer.capture_lambda_handler(process_booking_sfn=True)
+# @logger_inject_process_booking_sfn
+@lumigo_tracer(token='t_56497e64fb344c4f851e7', edge_host='https://4up6k52vcj.execute-api.us-west-2.amazonaws.com/api/spans', enhance_print=True, should_report=True)
 def lambda_handler(event, context):
     """AWS Lambda Function entrypoint to reserve a booking
 
@@ -165,13 +165,13 @@ def lambda_handler(event, context):
 
         log_metric(name="SuccessfulReservation", unit=MetricUnit.Count, value=1)
         logger.debug("Adding Booking Reservation annotation")
-        tracer.put_annotation("Booking", ret["bookingId"])
-        tracer.put_annotation("BookingStatus", "RESERVED")
+        # tracer.put_annotation("Booking", ret["bookingId"])
+        # tracer.put_annotation("BookingStatus", "RESERVED")
 
         # Step Functions use the return to append `bookingId` key into the overall output
         return ret["bookingId"]
     except BookingReservationException as err:
         log_metric(name="FailedReservation", unit=MetricUnit.Count, value=1)
         logger.debug("Adding Booking Reservation annotation before raising error")
-        tracer.put_annotation("BookingStatus", "ERROR")
+        # tracer.put_annotation("BookingStatus", "ERROR")
         raise BookingReservationException(details=err)

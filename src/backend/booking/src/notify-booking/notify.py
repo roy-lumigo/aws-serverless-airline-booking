@@ -34,7 +34,6 @@ class BookingNotificationException(Exception):
 
 
 # @tracer.capture_method
-@lumigo_tracer(token='t_56497e64fb344c4f851e7', edge_host='https://4up6k52vcj.execute-api.us-west-2.amazonaws.com/api/spans', enhance_print=True, should_report=True)
 def notify_booking(payload, booking_reference):
     """Notify whether a booking have been processed successfully
 
@@ -101,8 +100,9 @@ def notify_booking(payload, booking_reference):
         raise BookingNotificationException(details=err)
 
 
-@tracer.capture_lambda_handler(process_booking_sfn=True)
-@logger_inject_process_booking_sfn
+# @tracer.capture_lambda_handler(process_booking_sfn=True)
+# @logger_inject_process_booking_sfn
+@lumigo_tracer(token='t_56497e64fb344c4f851e7', edge_host='https://4up6k52vcj.execute-api.us-west-2.amazonaws.com/api/spans', enhance_print=True, should_report=True)
 def lambda_handler(event, context):
     """AWS Lambda Function entrypoint to notify booking
 
@@ -161,14 +161,14 @@ def lambda_handler(event, context):
 
         log_metric(name="SuccessfulNotification", unit=MetricUnit.Count, value=1)
         logger.debug("Adding Booking Notification annotation")
-        tracer.put_annotation("BookingNotification", ret["notificationId"])
-        tracer.put_annotation("BookingNotificationStatus", "SUCCESS")
+        # tracer.put_annotation("BookingNotification", ret["notificationId"])
+        # tracer.put_annotation("BookingNotificationStatus", "SUCCESS")
 
         # Step Functions use the return to append `notificationId` key into the overall output
         return ret["notificationId"]
     except BookingNotificationException as err:
         log_metric(name="FailedNotification", unit=MetricUnit.Count, value=1)
         logger.debug("Adding Booking Notification annotation before raising error")
-        tracer.put_annotation("BookingNotificationStatus", "FAILED")
+        # tracer.put_annotation("BookingNotificationStatus", "FAILED")
 
         raise BookingNotificationException(details=err)

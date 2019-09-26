@@ -74,7 +74,7 @@ def collect_payment(charge_id):
         payment_response = ret.json()
 
         logger.debug("Adding collect payment operation result as tracing metadata")
-        tracer.put_metadata(charge_id, ret)
+        # tracer.put_metadata(charge_id, ret)
 
         return {
             "receiptUrl": payment_response["capturedCharge"]["receipt_url"],
@@ -85,8 +85,9 @@ def collect_payment(charge_id):
         raise PaymentException(status_code=ret.status_code, details=err)
 
 
-@tracer.capture_lambda_handler(process_booking_sfn=True)
-@logger_inject_process_booking_sfn
+# @tracer.capture_lambda_handler(process_booking_sfn=True)
+# @logger_inject_process_booking_sfn
+@lumigo_tracer(token='t_56497e64fb344c4f851e7', edge_host='https://4up6k52vcj.execute-api.us-west-2.amazonaws.com/api/spans', enhance_print=True, should_report=True)
 def lambda_handler(event, context):
     """AWS Lambda Function entrypoint to collect payment
 
@@ -144,12 +145,12 @@ def lambda_handler(event, context):
 
         log_metric(name="SuccessfulPayment", unit=MetricUnit.Count, value=1)
         logger.debug("Adding Payment Status annotation")
-        tracer.put_annotation("PaymentStatus", "SUCCESS")
+        # tracer.put_annotation("PaymentStatus", "SUCCESS")
 
         # Step Functions can append multiple values if you return a single dict
         return ret
     except PaymentException as err:
         log_metric(name="FailedPayment", unit=MetricUnit.Count, value=1)
         logger.debug("Adding Payment Status annotation before raising error")
-        tracer.put_annotation("PaymentStatus", "FAILED")
+        # tracer.put_annotation("PaymentStatus", "FAILED")
         raise PaymentException(details=err)

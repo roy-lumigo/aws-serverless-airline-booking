@@ -32,7 +32,6 @@ class RefundException(Exception):
 
 
 # @tracer.capture_method
-@lumigo_tracer(token='t_56497e64fb344c4f851e7', edge_host='https://4up6k52vcj.execute-api.us-west-2.amazonaws.com/api/spans', enhance_print=True, should_report=True)
 def refund_payment(charge_id):
     """Refunds payment from a given charge ID through Payment API
 
@@ -81,8 +80,9 @@ def refund_payment(charge_id):
         raise RefundException(status_code=ret.status_code, details=err)
 
 
-@tracer.capture_lambda_handler(process_booking_sfn=True)
-@logger_inject_process_booking_sfn
+# @tracer.capture_lambda_handler(process_booking_sfn=True)
+# @logger_inject_process_booking_sfn
+@lumigo_tracer(token='t_56497e64fb344c4f851e7', edge_host='https://4up6k52vcj.execute-api.us-west-2.amazonaws.com/api/spans', enhance_print=True, should_report=True)
 def lambda_handler(event, context):
     """AWS Lambda Function entrypoint to refund payment
 
@@ -132,12 +132,12 @@ def lambda_handler(event, context):
 
         log_metric(name="SuccessfulRefund", unit=MetricUnit.Count, value=1)
         logger.debug("Adding Payment Refund Status annotation")
-        tracer.put_annotation("Refund", ret["refundId"])
-        tracer.put_annotation("PaymentStatus", "REFUNDED")
+        # tracer.put_annotation("Refund", ret["refundId"])
+        # tracer.put_annotation("PaymentStatus", "REFUNDED")
 
         return ret
     except RefundException as err:
         log_metric(name="FailedRefund", unit=MetricUnit.Count, value=1)
         logger.debug("Adding Payment Refund Status annotation before raising error")
-        tracer.put_annotation("RefundStatus", "FAILED")
+        # tracer.put_annotation("RefundStatus", "FAILED")
         raise RefundException(details=err)
