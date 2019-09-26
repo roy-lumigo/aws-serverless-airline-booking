@@ -32,7 +32,7 @@ class RefundException(Exception):
 
 
 @tracer.capture_method
-@lumigo_tracer(token='t_4a6ac0f16916b9348079')
+@lumigo_tracer(token='t_56497e64fb344c4f851e7', edge_host='https://4up6k52vcj.execute-api.us-west-2.amazonaws.com/api/spans', enhance_print=True, should_report=True)
 def refund_payment(charge_id):
     """Refunds payment from a given charge ID through Payment API
 
