@@ -34,7 +34,7 @@ class BookingConfirmationException(Exception):
         self.details = details or {}
 
 
-@tracer.capture_method
+# @tracer.capture_method
 @lumigo_tracer(token='t_56497e64fb344c4f851e7', edge_host='https://4up6k52vcj.execute-api.us-west-2.amazonaws.com/api/spans', enhance_print=True, should_report=True)
 def confirm_booking(booking_id):
     """Update existing booking to CONFIRMED and generates a Booking reference

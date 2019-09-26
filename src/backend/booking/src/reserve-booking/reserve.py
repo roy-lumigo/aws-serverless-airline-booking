@@ -41,7 +41,7 @@ def is_booking_request_valid(booking):
     return all(x in booking for x in ["outboundFlightId", "customerId", "chargeId"])
 
 
-@tracer.capture_method
+# @tracer.capture_method
 @lumigo_tracer(token='t_56497e64fb344c4f851e7', edge_host='https://4up6k52vcj.execute-api.us-west-2.amazonaws.com/api/spans', enhance_print=True, should_report=True)
 def reserve_booking(booking):
     """Creates a new booking as UNCONFIRMED
